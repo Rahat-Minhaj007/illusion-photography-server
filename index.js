@@ -1,7 +1,11 @@
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
-const ObjectId = require('mongodb').ObjectID;
-const bodyParser = require('body-parser');
+// const MongoDb = require('mongodb');
+const ObjectID = require('mongodb').ObjectId;
+
+
+// const bodyParser = require('body-parser');
+
 const cors = require('cors');
 require('dotenv').config();
 
@@ -11,7 +15,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const app = express()
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 const port = process.env.PORT || 5055;
 
@@ -75,7 +79,8 @@ client.connect(err => {
 
     app.delete('/delete/:id', (req, res) => {
         console.log(req.params.id);
-        eventCollection.deleteOne({ _id: ObjectId(req.params.id) })
+        const id = ObjectID(req.params.id);
+        eventCollection.deleteOne({ _id: id})
 
             .then(result => {
 
