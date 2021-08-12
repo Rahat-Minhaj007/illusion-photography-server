@@ -36,7 +36,7 @@ client.connect(err => {
     const eventCollection = client.db("illusionPhoto").collection("services");
     const orderCollection = client.db("illusionPhoto").collection("orders");
 
-    
+
 
     app.get('/service', (req, res) => {
         eventCollection.find()
@@ -76,11 +76,35 @@ client.connect(err => {
             })
     })
 
+    app.get('/status/:id', (req, res) => {
+        console.log(req.params.id);
+
+        orderCollection.find({ _id: ObjectID(req.params.id) })
+            .toArray((err, documents) => {
+                res.send(documents[0]);
+
+            })
+    })
+
+    app.patch('/update/:id', (req, res) => {
+        console.log(req.params.id);
+
+        orderCollection.updateOne({ _id: ObjectID(req.params.id) },
+            {
+                $set: { status: req.body.updateStatus }
+            })
+            .then(result => {
+
+                console.log(result);
+            })
+
+    })
+
 
     app.delete('/delete/:id', (req, res) => {
         console.log(req.params.id);
         const id = ObjectID(req.params.id);
-        eventCollection.deleteOne({ _id: id})
+        eventCollection.deleteOne({ _id: id })
 
             .then(result => {
 
